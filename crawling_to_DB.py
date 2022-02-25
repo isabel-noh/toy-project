@@ -25,6 +25,7 @@ for item in items:
     mntilistno = item.find('mntilistno').text
     mntiname = item.find('mntiname').text
     mntitop = item.find('mntitop').text
+    mntiarea = mntiadd.split()
 
     request = requests.get(img_address + mntilistno, headers=headers)
     img = BeautifulSoup(request.text, 'html.parser')
@@ -36,6 +37,7 @@ for item in items:
     if mntitop != ' ':
         doc = {'mnt_no':mnt_no, # OpenAPI의 명산 미표기로 인해 총 100개 중 98개의 명산만 등록돼 있습니다. 이 역시 DB에서 추가 기입이 가능합니다.
                'mnt_name': mntiname,
+               'mnt_area': mntiarea[0],
                'mnt_address': mntiadd,
                'mnt_img':mntiimg,
                'mnt_height':mntihigh,
