@@ -1,3 +1,6 @@
+# 해당 코드는 DB에 보관되지 않고 API에서 곧바로 전달되는 방식입니다.
+# DB에 저장한 뒤 자료를 전송하는 방식으로 만들어진 crawling_to_DB.py 와 DB_to_front.py를 사용하길 권합니다.
+
 from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
