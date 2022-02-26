@@ -1,0 +1,102 @@
+* {
+    font-family: 'Gowun Dodum', sans-serif;
+}
+.mytitle {
+    position: fixed;
+    top: 0;
+
+    width: 100%;
+    height: 200px;
+
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.imgur.com/wVQ10Wi.jpg');
+    background-position: center;
+    background-size: cover;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+/*body*/
+#wrapper{
+    padding-top: 200px;
+    height: auto;
+    min-height: 100%;
+    padding-bottom: 150px;
+}
+/*content*/
+.content{
+    width: 750px;
+    margin: auto;
+}
+img{
+    display: block;
+    margin: 10px auto 10px auto;
+    width: 600px;
+    height: auto;
+    border-radius: 5px;
+}
+.aeatreason{
+    font-weight: bold;
+}
+.address{
+    text-align: center;
+}
+.map {
+    width: 600px;
+    height: 400px;
+    margin: auto;
+    text-align: center;
+}
+
+/*mycomment*/
+.mycomment{
+    width: 700px;
+    margin: auto;
+}
+.myusername{
+    margin: 10px auto 10px auto;
+}
+textarea{
+    border-radius: 3px;
+    border: 1px solid lightgrey;
+}
+.mystar{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.submit{
+    width: 700px;
+    margin: auto;
+}
+.submit >button{
+    float: right;
+}
+.comments{    
+    width: 700px;
+    margin: auto;
+}
+/*comment*/
+.username{
+    color: grey;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+/*footer*/
+footer{
+    height: 150px;
+    position : relative;
+    padding: 10px 0px 0px 50px;
+    /* transform : translateY(-100%); */ /*구글에서 footer bottom으로 박을 때 이걸 쓰랬는데 안쓰니까 bottom에 박히는데? 일단 주석처리 ㄱ*/
+    border: 1px solid lightgrey;
+}
+.footer-title{
+    font-size: 2em;
+    color: grey;
+}
+.footer-detail{
+    color: darkgrey;
+}
