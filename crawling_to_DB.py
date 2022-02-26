@@ -15,9 +15,12 @@ items = soup.select('item')
 
 img_address = 'http://apis.data.go.kr/1400000/service/cultureInfoService/mntInfoImgOpenAPI?serviceKey=X9EDkk%2FU5LjubctVnvGU3Nq3xjQ%2Byl6lcfP9Yk2DqGTEvZ%2F4UynHm5%2FoaMvzn9YIDyOkzvLPKuTixih8d1yNlg%3D%3D&mntiListNo='
 img_import = 'http://www.forest.go.kr/images/data/down/mountain/'
-mnt_no = 1
 
 for item in items:
+
+    all_mnt = list(db.mnt_info.find({}, {'_id': False}))
+    mnt_no = (len(all_mnt) + 1)
+
     crtymd = item.find('crtymd').text
     mntiadd = item.find('mntiadd').text
     mntidetails = item.find('mntidetails').text
