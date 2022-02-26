@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -13,25 +12,148 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
-    <title>6기 24조 toy-project(mainpage)</title>
+    <title>한국 명산 코스 정보 커뮤니티</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
 
     <style>
         * {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Gowun Dodum', sans-serif;
         }
 
-        // 코드 작성
+
+        .mytitle {
+            width: 100%;
+            height: 400px;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.imgur.com/wVQ10Wi.jpg');
+            background-position: center;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-group{
+            width: 800px;
+            height: 50px;
+        }
+
+        .mtname{
+            font-weight: bold;
+        }
+        .mtsubinfo {
+
+        }
+        .mtaddress {
+            color: gray;
+        }
+
+        .mycards {
+            margin: 30px auto 30px auto;
+            width: 95%;
+        }
+
     </style>
-
-    <script>
-        // 코드 작성
-    </script>
-
 </head>
+
 <body>
+<div class="mytitle">
     <h1>한국 명산 코스 정보 커뮤니티</h1>
-    <p>class, id 값은 만들면서 슬랙 공유 > 통일해서 진행</p>
-    <p>api 인증키</p>
-    9RucDw1Xmk16mCnCOBY3aAfQPMCnyS3sTP3v2tthlVw0CS9TZ6j64bTzDG1UEW9u%2BiY6X05TKK6OaYDR4HySog%3D%3D
+    <p>
+    <div class="input-group">
+        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+            <option selected>지역 선택</option>
+            <option value="1">전체</option>
+            <option value="2">서울특별시</option>
+            <option value="3">부산광역시</option>
+            <option value="3">mntiarea = mntiadd.split()</option>
+        </select>
+            <button type="button" class="btn btn-success">찾아보기</button>
+    </div>
+    </p>
+</div>
+
+<div class="mycards">
+    <div class="row row-cols-1 row-cols-md-5 g-4" id="cards-box">
+        <div class="col">
+            <div class="card h-100">
+                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="mtname">가리산 산이름/mntiname</h5>
+                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
+                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
+                    </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="mtname">산이름/석준님key mntiname</h5>
+                        <p class="mtsubinfo">산정보부제/미란님key subnm</p>
+                        <p class="mtaddress">주소/석준님key mntiadd</p>
+                    </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="mtname">가리산 산이름/mntiname</h5>
+                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
+                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
+                    </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="mtname">가리산 산이름/mntiname</h5>
+                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
+                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
+                    </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="mtname">가리산 산이름/mntiname</h5>
+                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
+                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
+                    </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="mtname">가리산 산이름/mntiname</h5>
+                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
+                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
+                    </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="mtname">가리산 산이름/mntiname</h5>
+                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
+                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
 </body>
+
 </html>
