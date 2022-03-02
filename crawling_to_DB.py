@@ -16,6 +16,8 @@ items = soup.select('item')
 img_address = 'http://apis.data.go.kr/1400000/service/cultureInfoService/mntInfoImgOpenAPI?serviceKey=X9EDkk%2FU5LjubctVnvGU3Nq3xjQ%2Byl6lcfP9Yk2DqGTEvZ%2F4UynHm5%2FoaMvzn9YIDyOkzvLPKuTixih8d1yNlg%3D%3D&mntiListNo='
 img_import = 'http://www.forest.go.kr/images/data/down/mountain/'
 
+# 하단의 코드로 100대 명산에 대한 정보를 저희들의 DB에 넣어주는 작업을 하게 됩니다. 한 번 씩만 작동시키면 되며, 4000개가 넘는 목록을 조회하므로 DB로 옮겨가기까지 많이 지연될 수 있습니다.
+
 for item in items:
 
     all_mnt = list(db.mnt_info.find({}, {'_id': False}))
@@ -24,7 +26,7 @@ for item in items:
     crtymd = item.find('crtymd').text
     mntiadd = item.find('mntiadd').text
     mntidetails = item.find('mntidetails').text
-    mntihigh = item.find('mntihigh').text # 산 높이는 0으로 표기된 경우가 많아 쓰지 않는 것을 추천합니다. DB에서 직접 수정하는 방법도 있습니다.
+    mntihigh = item.find('mntihigh').text
     mntilistno = item.find('mntilistno').text
     mntiname = item.find('mntiname').text
     mntitop = item.find('mntitop').text
@@ -38,14 +40,14 @@ for item in items:
         mntiimg = (img_import + i.find('imgfilename').text)
 
     if mntitop != ' ':
-        doc = {'mnt_no':mnt_no, # OpenAPI의 명산 미표기로 인해 총 100개 중 98개의 명산만 등록돼 있습니다. 이 역시 DB에서 추가 기입이 가능합니다.
-               'mnt_name': mntiname,
-               'mnt_area': mntiarea[0],
-               'mnt_address': mntiadd,
-               'mnt_img':mntiimg,
-               'mnt_height':mntihigh,
-               'mnt_desc':mntidetails,
-               'mnt_crtymd':crtymd,
-               'mnt_top':mntitop}
-        mnt_no = (mnt_no + 1)
+        doc = {'mnt_no':mnt_no, # 자체적으로 기입한 산의 정보입니다. 1번부터 98번까지의 자료가 저장됩니다. openAPI의 정보 미표기 문제이니 DB에 리스트를 직접 추가해줘야 합니다.
+               'mnt_name': mntiname, # mntiname : 산의 이름을 저장합니다.
+               'mnt_area': mntiarea[0], # mntiarea : 산의 소재지역(경상도, 서울특별시처럼)을 저장합니다.
+               'mnt_address': mntiadd, # mntiadd : 산의 주소지를 저장합니다.
+               'mnt_img':mntiimg, # mntiimg : 산의 이미지 정보가 담긴 주소를 저장합니다.
+               'mnt_height':mntihigh, # mntihigh : 산의 높이입니다. 0으로 표기된 경우가 많아 쓰지 않는 것을 추천합니다. DB에서 직접 수정하는 방법도 있습니다.
+               'mnt_desc':mntidetails, # mntidetails : 산의 상세설명을 저장합니다.
+               'mnt_crtymd':crtymd, # crtymd : 산의 정보에 대한 갱신일자를 저장합니다.
+               'mnt_top':mntitop} # mntitop : 100대 명산으로 선정된 이유를 설명합니다.
+        mnt_no += 1
         db.mnt_info.insert_one(doc)
