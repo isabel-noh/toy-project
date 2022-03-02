@@ -20,7 +20,162 @@
             font-family: 'Noto Sans KR', sans-serif;
         }
 
-        // 코드 작성
+        .post-box {
+            max-width: 700px;
+            width: 95%;
+
+            margin: 40px auto 40px auto;
+
+            box-shadow: 0px 0px 3px 0px;
+            border: 2px solid wheat;
+            border-radius: 5px;
+            background-color: white;
+            padding: 20px;
+        }
+
+        select {
+            height: 30px;
+            color: dimgray;
+            margin-bottom: 30px;
+            left: 0%;
+        }
+
+        select:hover {
+            border: 2px solid #1A2E40;
+        }
+
+        select:focus {
+            color: #1A2E40
+        }
+
+        textarea {
+            left: 0%;
+            margin-bottom: 20px;
+            min-width: 650px;
+            width: 20%;
+            height: 100px;
+            color: #1A2E40;
+        }
+
+        textarea:hover {
+            border: 2px solid #1A2E40;
+        }
+
+        textarea:focus {
+            background-color: whitesmoke;
+            border: 2px solid #1A2E40;
+            color: #1A2E40;
+            outline: none;
+        }
+
+        .mybtn-outline {
+            left: 0%;
+            position: relative;
+            padding: 1px 25px;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+        .mybtn-outline:hover {
+            letter-spacing: 2px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .mybtn-outline:active {
+            transform: scale(1.5);
+        }
+
+        .mybtn-green-outline {
+            border: 2px solid dimgray;
+            background-color: white;
+            color: #1A2E40;
+        }
+
+        .mybtn-green-outline:hover {
+            background-color: #1A2E40;
+            color: #d7fff1;
+        }
+
+        .card-box {
+            /*flex-direction: row;*/
+            background-color: whitesmoke;
+            width: 700px;
+            margin: 20px auto 20px auto;
+            box-shadow: 0px 0px 3px 0px;
+            border-radius: 5px;
+            border: 1px solid #DDB395;
+        }
+
+        .myname {
+            position: relative;
+            width: 300px;
+            height: 50px;
+            left: 0%;
+            color: dimgray;
+        }
+
+        .myname input {
+            box-sizing: border-box;
+            padding: 20px 0 0;
+            width: 100%;
+            height: 100%;
+            border: 0 none;
+            color: #1A2E40;
+            outline: none;
+        }
+
+        .myname label {
+            position: absolute;
+            left: 0%; /*좌측 정렬*/
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            border-bottom: 1px solid gray;
+            text-align: left;
+            pointer-events: none; /*기존 html 속성을 없애는...?*/
+        }
+
+        /*after는 기존 label의 효과 뒤에 붙는다. content:""까지 형식이라 보면된다. 파란색 줄 생기기*/
+        .myname label:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 0;
+            height: 100%;
+            border-bottom: 3px solid #1A2E40;
+            transition: all .3s ease;
+        }
+
+        /* 애니메이션 효과, transition이 주요 포인트 */
+        .myname label span {
+            position: absolute;
+            left: 0;
+            bottom: 5px;
+            transition: all .3s ease;
+        }
+
+        /* input에 글을 입력하고 포커스가 지나간 상태에서 제어하려면 valid 선택자를 써야한다. */
+        /* 포커스 될 때 label span(name)이 위로 올라감 */
+        .myname input:focus + label span,
+        .myname input:valid + label span {
+            transform: translateY(-150%); /* 상하 수직 방향 이동 */
+            font-size: 14px;
+            color: #1A2E40;
+        }
+
+        /* 포커스 될 때 파란색 가로줄이 생김 */
+        .myname input:focus + label::after,
+        .myname input:valid + label::after {
+            width: 100%;
+            transform: translateX(0);
+        }
+
+
     </style>
 
     <script>
@@ -29,9 +184,61 @@
 
 </head>
 <body>
-    <h1>00산</h1>
-    <p>class, id 값은 만들면서 슬랙 공유 > 통일해서 진행</p>
-    <p>api 인증키</p>
-    9RucDw1Xmk16mCnCOBY3aAfQPMCnyS3sTP3v2tthlVw0CS9TZ6j64bTzDG1UEW9u%2BiY6X05TKK6OaYDR4HySog%3D%3D
+<div class="post-box">
+    <form action="get">
+        <p class="myname">
+            <input type="text" id="user_name" autocomplete="off" required>
+            <label for="user_name"><span>이 름</span></label>
+        </p>
+    </form>
+    <select>
+        <option selected>--별점--</option>
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+    </select>
+    <textarea id="comment-box" placeholder="리뷰 남기기"></textarea>
+    <button onclick="hiking" class="mybtn-outline mybtn-green-outline" type="button">댓 글 등 록</button>
+</div>
+
+<div class="card-box">
+    <div class="card-header">
+        ⭐⭐⭐⭐
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <h5>여기에 코멘트를 입력합니다.</h5>
+            <br>
+            <footer class="blockquote-footer">여기에 이름을 입력합니다.</footer>
+        </blockquote>
+    </div>
+</div>
+<div class="card-box">
+    <div class="card-header">
+        ⭐⭐⭐⭐
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <h5>여기에 코멘트를 입력합니다.</h5>
+            <br>
+            <footer class="blockquote-footer">여기에 이름을 입력합니다.</footer>
+        </blockquote>
+    </div>
+</div>
+<div class="card-box">
+    <div class="card-header">
+        ⭐⭐⭐⭐
+    </div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <h5>여기에 코멘트를 입력합니다.</h5>
+            <br>
+            <footer class="blockquote-footer">여기에 이름을 입력합니다.</footer>
+        </blockquote>
+    </div>
+</div>
+
 </body>
 </html>
