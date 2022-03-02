@@ -125,7 +125,7 @@
         });
 
         function mnt_info(){
-                $('#detail').empty();
+            $('#detail').empty();
                 $.ajax({
                 type: 'GET',
                 url: '/mnt_info',
@@ -145,7 +145,9 @@
                                         <hr>
                                         <p>높이: ${mnt_height}km</p>
                                         <p>${mnt_desc}</p>`
-                        $("#img-mtn").attr("src", ${mnt_img});
+                        let temp_head_html = `<h1>${mnt_name}</h1>`
+                        $("#img-mtn").attr("src", mnt_img)
+                        ${'.mytitle'}.append(temp_head_html)
                         $('#detail').append(temp_html)
 
                     }
@@ -170,7 +172,7 @@
                                             <p class="comment">${comment}</p>
                                             <div class="username">${user_name}</div><hr>
                                         </div>`
-                        
+
                         $('#allcomments').append(temp_html)
 
                     }
