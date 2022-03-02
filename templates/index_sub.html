@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -14,11 +13,185 @@
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/style.css">
     <title>6기 24조 toy-project(subpage)</title>
+    <style>
+        * {
+    font-family: 'Gowun Dodum', sans-serif;
+        }
+        .mytitle {
+            position: fixed;
+            top: 0;
 
+            width: 100%;
+            height: 200px;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.imgur.com/wVQ10Wi.jpg');
+            background-position: center;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        /*body*/
+        #wrapper{
+            padding-top: 200px;
+            height: auto;
+            min-height: 100%;
+            padding-bottom: 150px;
+        }
+        /*content*/
+        .content{
+            width: 750px;
+            margin: auto;
+        }
+        img{
+            display: block;
+            margin: 10px auto 10px auto;
+            width: 600px;
+            height: auto;
+            border-radius: 5px;
+        }
+        .aeatreason{
+            font-weight: bold;
+        }
+        .address{
+            text-align: center;
+        }
+        .map {
+            width: 600px;
+            height: 400px;
+            margin: auto;
+            text-align: center;
+        }
+
+        /*mycomment*/
+        .mycomment{
+            width: 700px;
+            margin: auto;
+        }
+        .myusername{
+            margin: 10px auto 10px auto;
+        }
+        textarea{
+            width: 700px;
+            border-radius: 3px;
+            border: 1px solid lightgrey;
+        }
+        .mystar{
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        .submit{
+            width: 700px;
+            margin: auto;
+        }
+        .submit >button{
+            float: right;
+        }
+        .allcomments{
+            width: 700px;
+            margin: auto;
+        }
+        /*comment*/
+        .username{
+            color: grey;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        /*footer*/
+        footer{
+            height: 150px;
+            position : relative;
+            padding: 10px 0px 0px 50px;
+            /* transform : translateY(-100%); */ /*구글에서 footer bottom으로 박을 때 이걸 쓰랬는데 안쓰니까 bottom에 박히는데? 일단 주석처리 ㄱ*/
+            border: 1px solid lightgrey;
+        }
+        .footer-title{
+            font-size: 2em;
+            color: grey;
+        }
+        .footer-detail{
+            color: darkgrey;
+        }
+    </style>
     <script>
-        // 코드 작성
-    </script>
+        $(document).ready(function () {
+            listcmt();
+            mnt_info();
+        });
 
+        function mnt_info(){
+                $('#detail').empty();
+                $.ajax({
+                type: 'GET',
+                url: '/mnt_info',
+                data: {},
+                success: function (response) {
+                    let rows = response['response']
+                    for(let i = 0; i < rows.length; i++){
+                        let mnt_name = rows[i]['mnt_name']
+                        let mnt_no = rows[i]['mnt_no']
+                        let mnt_address = rows[i]['mnt_address']
+                        let mnt_img = rows[i]['mnt_img']
+                        let mnt_desc = rows[i]['mnt_desc']
+                        let mnt_top = rows[i]['mnt_top']
+                        let mnt_height = rows[i]['mnt_height']
+                        let temp_html = `<p class="address">주소: ${mnt_address}</p>
+                                        <p class="aeatreason">${mnt_top}</p>
+                                        <hr>
+                                        <p>높이: ${mnt_height}km</p>
+                                        <p>${mnt_desc}</p>`
+                        $("#img-mtn").attr("src", ${mnt_img});
+                        $('#detail').append(temp_html)
+
+                    }
+                }
+            })
+        }
+        function listcmt() {
+            $('#allcomments').empty();
+            $.ajax({
+                type: 'GET',
+                url: '/mountain/comment',
+                data: {},
+                success: function (response) {
+                    let rows = response['comments']
+                    for(let i = 0; i < rows.length; i++){
+                        let user_name = rows[i]['username']
+                        let star = rows[i]['star']
+                        let comment = rows[i]['comment']
+                        let star_image = '⭐'.repeat(star)
+                        let temp_html = `<div class="comments">
+                                            <div class="star">${star_image}</div>
+                                            <p class="comment">${comment}</p>
+                                            <div class="username">${user_name}</div><hr>
+                                        </div>`
+                        
+                        $('#allcomments').append(temp_html)
+
+                    }
+                }
+            })
+        }
+        function postcmt() {
+            let user_name = $('#user-name').val()
+            let star = $('#mystar').val()
+            let comment = $('#mytext').val()
+            $.ajax({
+                type: 'POST',
+                url: '/mountain/comment',
+                data: {username_give:user_name, star_give:star, comment_give:comment},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <!--title-->
@@ -28,10 +201,10 @@
     <!--real body, wrapper-->
     <div id="wrapper">
         <div class="content">
-            <div class="image-mt">
-                <img src="https://i.imgur.com/wVQ10Wi.jpg" alt="ㅇㅇ산">
+            <div id="imagebox-mt">
+                <img id="img-mtn" src="https://i.imgur.com/wVQ10Wi.jpg" alt="ㅇㅇ산">
             </div>
-            <div class="detail">
+            <div id="detail" class="detail">
                 <p class="address">주소: 강원도 춘천시 북산면ㆍ동면, 홍천군 두촌면ㆍ화촌면</p>
                 <p class="aeatreason">강원도에서 진달래가 가장 많이 피는 산으로 알려져 있고, 참나무 중심의 울창한 산림과 부드러운 산줄기 등 우리나라 산의 전형적인 모습을 갖추고 있으며, 홍천강의 발원지 및 소양강의 수원(水源)을 이루고 있는 점 등을 고려하여 선정암봉이 솟아있는 정상에서 소양호를 조망할 수 있고, 야생화가 많이 서식하여 자연학습관찰에도 좋은 여건을 갖추고 있음. "98년 강원도에서 자연휴양림으로 지정.</p>
                 <hr>
@@ -55,7 +228,7 @@
                 <textarea id="mytext" cols="48" rows="3" placeholder="댓글을 작성해주세요"></textarea>
             </div>
             <div class="mystar">
-                <select class="star-select" id="inputGroupSelect01">
+                <select class="star-select" id="mystar">
                     <option selected>별점</option>
                       <option value="5">⭐⭐⭐⭐⭐</option>
                       <option value="4">⭐⭐⭐⭐</option>
@@ -65,25 +238,25 @@
                 </select>
             </div>
             <div class="submit">
-                <button id="btn-write" type="button" class="btn btn-success">작성</button>
+                <button onclick="postcmt()" id="btn-write" type="button" class="btn btn-success">작성</button>
             </div>
             <hr style="margin-top: 70px;">
         </div>
         <!--comments보여주는곳-->
-        <div class="comments">
-            <div id="comment">
+        <div class="allcomments" id="allcomments">
+            <div class="comments">
                 <div class="star">⭐⭐⭐⭐⭐</div>
-                <p class="comment">여기 산 너무 좋아요!</p>
+                <p class="comment">댓글을 작성해주세요</p>
                 <div class="username">닉네임</div><hr>
             </div>
-            <div id="comment">
+            <div class="comments">
                 <div class="star">⭐⭐⭐⭐⭐</div>
-                <p class="comment">여기 산 너무 좋아요!</p>
+                <p class="comment">댓글을 작성해주세요</p>
                 <div class="username">닉네임</div><hr>
             </div>
-            <div id="comment">
+            <div class="comments">
                 <div class="star">⭐⭐⭐⭐⭐</div>
-                <p class="comment">여기 산 너무 좋아요!</p>
+                <p class="comment">댓글을 작성해주세요</p>
                 <div class="username">닉네임</div><hr>
             </div>
         </div>
@@ -96,7 +269,7 @@
                 한국 명산 코스 정보 커뮤니티
             </div>
             <div class="footer-detail">
-                Designed by 항해99 사전스터디 24조
+                Designed by 항해99 사진스터디 24조
             </div>
         </div>
     </footer>
