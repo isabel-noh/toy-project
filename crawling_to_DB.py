@@ -40,14 +40,14 @@ for item in items:
         mntiimg = (img_import + i.find('imgfilename').text)
 
     if mntitop != ' ':
-        doc = {'mnt_no':mnt_no, # 자체적으로 기입한 산의 정보입니다. 1번부터 98번까지의 자료가 저장됩니다. openAPI의 정보 미표기 문제이니 DB에 리스트를 직접 추가해줘야 합니다.
-               'mnt_name': mntiname, # mntiname : 산의 이름을 저장합니다.
-               'mnt_area': mntiarea[0], # mntiarea : 산의 소재지역(경상도, 서울특별시처럼)을 저장합니다.
-               'mnt_address': mntiadd, # mntiadd : 산의 주소지를 저장합니다.
-               'mnt_img':mntiimg, # mntiimg : 산의 이미지 정보가 담긴 주소를 저장합니다.
-               'mnt_height':mntihigh, # mntihigh : 산의 높이입니다. 0으로 표기된 경우가 많아 쓰지 않는 것을 추천합니다. DB에서 직접 수정하는 방법도 있습니다.
-               'mnt_desc':mntidetails, # mntidetails : 산의 상세설명을 저장합니다.
-               'mnt_crtymd':crtymd, # crtymd : 산의 정보에 대한 갱신일자를 저장합니다.
-               'mnt_top':mntitop} # mntitop : 100대 명산으로 선정된 이유를 설명합니다.
+        doc = {'mnt_no':mnt_no, # mnt_no : 자체적으로 기입한 산의 정보입니다. 1번부터 98번까지의 자료가 저장됩니다. openAPI의 정보 미표기 문제이니 DB에 리스트를 직접 추가해줘야 합니다.
+               'mnt_name': mntiname, # mnt_name : 산의 이름을 저장합니다.
+               'mnt_area': mntiarea[0], # mnt_area : 산의 소재지역(경상도, 서울특별시처럼)을 저장합니다.
+               'mnt_address': mntiadd, # mnt_address : 산의 주소지를 저장합니다.
+               'mnt_img':mntiimg, # mnt_img : 산의 이미지 정보가 담긴 주소를 저장합니다.
+               'mnt_height':mntihigh, # mnt_height : 산의 높이입니다. 0으로 표기된 경우가 많아 쓰지 않는 것을 추천합니다. DB에서 직접 수정하는 방법도 있습니다.
+               'mnt_desc':mntidetails, # mnt_desc : 산의 상세설명을 저장합니다.
+               'mnt_crtymd':crtymd, # mnt_crtymd : 산의 정보에 대한 갱신일자를 저장합니다.
+               'mnt_top':mntitop} # mnt_top : 100대 명산으로 선정된 이유를 설명합니다.
         mnt_no += 1
         db.mnt_info.insert_one(doc)
