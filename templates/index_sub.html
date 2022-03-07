@@ -11,48 +11,246 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="static/style.css">
-    <title>6기 24조 toy-project(subpage)</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cc63cbb83555d894219f7525f0a6a06d&libraries=services"></script> <!--각자의 카카오맵 자바스크립트 앱키를 넣어주셔야 합니다.-->
 
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <!--<link rel="stylesheet" href="static/style.css">-->
+    <title>6기 24조 toy-project(subpage)</title>
+	<style>
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+        .mytitle {
+            position: fixed;
+            z-index: 1;
+            top: 0;
+
+            width: 100%;
+            height: 200px;
+
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.imgur.com/wVQ10Wi.jpg');
+            background-position: center;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /*body*/
+        #wrapper {
+            padding-top: 200px;
+            height: auto;
+            min-height: 100%;
+            padding-bottom: 150px;
+        }
+
+        /*content*/
+        .content {
+            max-width: 750px;
+            width: 95%;
+            margin: auto;
+        }
+
+        img {
+            display: block;
+            margin: 10px auto 10px auto;
+            max-width: 600px;
+            width: 95%;
+            border-radius: 5px;
+        }
+
+        .aeatreason {
+            font-weight: bold;
+        }
+
+        .address {
+            text-align: center;
+        }
+
+        .map {
+            max-width: 600px;
+            width: 95%;
+            height: 400px;
+            margin: auto;
+            text-align: center;
+        }
+
+        /*mycomment*/
+        .mycomment {
+            max-width: 700px;
+            width: 95%;
+            margin: auto;
+        }
+
+        .myusername {
+            margin: 10px auto 10px auto;
+        }
+
+        textarea {
+            max-width: 700px;
+            width: 95%;
+            border: 1px solid lightgrey;
+        }
+
+        .mystar {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        .submit {
+            max-width: 700px;
+            width: 95%;
+            margin: auto;
+        }
+
+        .submit > button {
+            float: right;
+        }
+
+        .allcomments {
+            max-width: 700px;
+            width: 95%;
+            margin: auto;
+        }
+
+        /*comment*/
+        .username {
+            color: grey;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        /*footer*/
+        footer {
+            height: 150px;
+            position: relative;
+            padding: 10px 0px 0px 50px;
+            /* transform : translateY(-100%); */ /*구글에서 footer bottom으로 박을 때 이걸 쓰랬는데 안쓰니까 bottom에 박히는데? 일단 주석처리 ㄱ*/
+            border: 1px solid lightgrey;
+        }
+
+        .footer-title {
+            font-size: 2em;
+            color: grey;
+        }
+
+        .footer-detail {
+            color: darkgrey;
+        }
+    </style>
     <script>
-        // 코드 작성
+        $(document).ready(function () {
+            init_page() // 받은 산의 정보를 바탕으로 페이지의 정보를 초기화합니다.
+            show_comment() // 해당 산에 대한 코멘트를 불러옵니다.
+		})
+        function init_page() {
+            $.ajax({
+                type: "GET",
+                url: "/mnt_show?num_give="+'{{mnt_no}}', // app.py에서 mnt_no로 받은 정보를 활용해 검색 후 데이터를 받아옵니다. flask를 통해 받은 데이터는 {{데이터}} 로 활용이 가능해요.
+                data: {},
+                success: function(response){
+                    let mnt_data = response['mnt_data'] // 아래의 메소드들은 내장 메소드로, id 태그의 내용을 받아온 데이터로 변환시키는 작업을 합니다.
+
+                    document.getElementById("mnt_name").innerHTML=mnt_data['mnt_name']
+                    document.getElementById("mnt_address").innerHTML=mnt_data['mnt_address']
+                    document.getElementById("mnt_top").innerHTML=mnt_data['mnt_top']
+                    document.getElementById("mnt_desc").innerHTML=mnt_data['mnt_desc']
+
+                    let temp_html=`<img src=${mnt_data['mnt_img']} alt=${mnt_data['mnt_name']}>`
+                    $('#mnt_img').append(temp_html)
+                }
+            })
+        }
+
+        function save_comment(){
+            let num = '{{mnt_no}}'
+            let name = $('#user-name').val()
+            let comment = $('#mytext').val()
+            let score = $('#inputGroupSelect01').val()
+
+            $.ajax({
+                type: "POST",
+                url: "/save_comment",
+                data: {'num':num, 'name':name, 'comment':comment, 'score':score},
+                success: function(response){
+                    console.log(response)
+                    if (Object.keys(response).includes('success')){
+                        alert(response['success'])
+                    $('#comment').empty()
+                    show_comment()
+                    }else {
+                        alert(response['denied'])
+                    }
+                }
+            })
+        }
+
+        function show_comment(){
+            $.ajax({
+                type: "GET",
+                url: "/show_comment?num_give="+'{{mnt_no}}', // app.py에서 mnt_no로 받은 정보를 활용해 검색 후 데이터를 받아옵니다. flask를 통해 받은 데이터는 {{데이터}} 로 활용이 가능해요.
+                data: {},
+                success: function(response){
+                    if (Object.keys(response).includes('msg')){
+                        let msg = response['msg']
+                        let temp_html=`<p>${msg}</p><hr>`
+                        $('#comment').append(temp_html)
+                    }else{
+                        let mnt_data = response['mnt_data']
+
+                        for (i = 0 ; i < mnt_data.length ; i++){
+                            let name = mnt_data[i]['name']
+                            let comment = mnt_data[i]['comment']
+                            let score = mnt_data[i]['score']
+
+                            let star_image = '⭐'.repeat(score)
+                            let temp_html=`<div class="star">${star_image}</div>
+                                         <p class="comment">${comment}</p>
+                                       <div class="username">${name}</div><hr>`
+                            $('#comment').append(temp_html)
+                        }
+                    }
+                }
+            })
+        }
+
     </script>
 
 </head>
 <body>
     <!--title-->
     <div class="mytitle">
-        <h1>ㅇㅇ산</h1>
+        <h1 id="mnt_name"></h1>
     </div>
     <!--real body, wrapper-->
     <div id="wrapper">
         <div class="content">
-            <div class="image-mt">
-                <img src="https://i.imgur.com/wVQ10Wi.jpg" alt="ㅇㅇ산">
+            <div id="mnt_img" class="image-mt">
             </div>
             <div class="detail">
-                <p class="address">주소: 강원도 춘천시 북산면ㆍ동면, 홍천군 두촌면ㆍ화촌면</p>
-                <p class="aeatreason">강원도에서 진달래가 가장 많이 피는 산으로 알려져 있고, 참나무 중심의 울창한 산림과 부드러운 산줄기 등 우리나라 산의 전형적인 모습을 갖추고 있으며, 홍천강의 발원지 및 소양강의 수원(水源)을 이루고 있는 점 등을 고려하여 선정암봉이 솟아있는 정상에서 소양호를 조망할 수 있고, 야생화가 많이 서식하여 자연학습관찰에도 좋은 여건을 갖추고 있음. "98년 강원도에서 자연휴양림으로 지정.</p>
+                <p id="mnt_address" class="address"></p>
+                <p id="mnt_top" class="aeatreason"></p>
                 <hr>
-                <p>&lt;소양강 비경 담은 신비한 암봉&gt;<br>가리산은 강원도 홍천군 두촌면과 화촌면, 춘천시 북산면, 동면에 걸쳐있는 해발 1050.9m의 산이다. 정상부를 이루는 산세가 마치 곡식을 차곡차곡 쌓아둔 ‘낟가리’와 닮았다고 하여 ‘가리산’이라 이름 붙여졌다고 전한다. 대체로 육산을 이루고 있는 산세이나 정상부는 거대한 3개의 바위봉우리로 이루어져 있다. 북서쪽에 자리잡은 소양호의 조망이 일품이며, 서쪽으로는 대룡산 어름이 보인다. 또 정상 아래의 바위 절벽에서 사시사철 솟는 석간수가 유명하다. 가리산은 홍천9경 중 2경으로 꼽힌다.</p>
-                <p>강원도 춘천시와 홍천군의 경계를 이루는 산으로, 산 정상에 서면 탁 트인 시야와 발 아래로 펼쳐진 소양호의 풍경이 등산객들의 발걸음을 멈추게 하는 곳이다. 산자락을 감싸 흐르는 조그마한 폭포의 물소리가 사람들의 마음을 시원하게 해주는 가리산은 우거진 숲과 노송들이 어루러져 비경을 이루고 있다. 소양호 쪽으로 하산하여 물노리 선착장에서 유람선을 타고 소양댐 선착장까지 나올 수 있어, 산행도 하고 배를 타는 재미가 있다.<br>산이름인 가리는 '단으로 묶은 곡식이나 땔나무 따위를 차곡차곡 쌓아둔 큰 더미'를 뜻하는 순우리말로서, 산봉우리가 노적가리처럼 고깔 모양으로 생긴 데서 유래한다. 태백산맥 중 내지(內地) 산맥의 일부를 이룬다. 제1봉 남쪽에서 홍천강이 발원하여 북한강의 지류인 소양강의 수원(水源)을 이룬다.능선은 완만한 편이나, 정상 일대는 좁은 협곡을 사이에 둔 3개의 암봉으로 이루어져 있으며 강원 제1의 전망대라고 할 만큼 조망이 뛰어나, 소양호를 비롯하여 북쪽으로 향로봉에서 설악산을 거쳐 오대산으로 힘차게 뻗어나간 백두대간 등 강원 내륙의 고산준령이 한눈에 보인다. 정상 부근에서는 소양호로 갈 수 있는 가삽고개가 있는데, 그 형태가 계단식 분지형으로 이루어져 있다.<br><br>북쪽 산록은 소양호에 미치고 동쪽 산록에 홍천광산이 있다. 산기슭에는 숲이 우거져 있고 갖가지 기암괴석이 즐비하며, 산 정상과 계곡에는 향토 수종인 참나무가 주종을 이루며 자라고 있다. 아래쪽에는 두릅나무·철쭉·싸리나무·산초나무 등 관목류와 약용으로 사용되는 피나물·애기똥풀·양지꽃 등 야생화가 서식하고 있다. 강원도에서 진달래가 가장 많이 피는 산으로도 유명하다. 1998년 가리산 자연휴영림으로 개장되어 통나무집·야영장·체육시설 등 편의시설이 있다. 휴양림 입구에는 높이 8m의 용소폭포가 있고, 주변에 스키장·온천·수타사·팔봉산 등의 관광지가 있다.</p>
+                <p id="mnt_desc"></p>
             </div>
             <!--지도-->
-            <div class="map">
-                지도 들어갈 부분
-            </div>
+            <div id="map" class="map"></div>
         </div>
         <!--comment-->
         <!--mycomment-->
         <div class="mycomment">
             <div><h5>Comment</h5></div>
             <div class="myusername">
-                <label for="user-name">닉네임</label> 
-                <input type="text" class="user-name" id="user-name" placeholder="닉네임">
+                <label for="user-name">닉네임</label>
+                <input name="input_value" type="text" class="user-name" id="user-name" placeholder="닉네임">
             </div>
             <div class="mytextarea-comment">
-                <textarea id="mytext" cols="48" rows="3" placeholder="댓글을 작성해주세요"></textarea>
+                <textarea name="input_value" id="mytext" cols="48" rows="3" placeholder="댓글을 작성해주세요"></textarea>
             </div>
             <div class="mystar">
                 <select class="star-select" id="inputGroupSelect01">
@@ -65,26 +263,13 @@
                 </select>
             </div>
             <div class="submit">
-                <button id="btn-write" type="button" class="btn btn-success">작성</button>
+                <button id="btn-write" type="button" class="btn btn-success" onclick="save_comment()">작성</button>
             </div>
             <hr style="margin-top: 70px;">
         </div>
         <!--comments보여주는곳-->
-        <div class="comments">
+        <div class="allcomments">
             <div id="comment">
-                <div class="star">⭐⭐⭐⭐⭐</div>
-                <p class="comment">여기 산 너무 좋아요!</p>
-                <div class="username">닉네임</div><hr>
-            </div>
-            <div id="comment">
-                <div class="star">⭐⭐⭐⭐⭐</div>
-                <p class="comment">여기 산 너무 좋아요!</p>
-                <div class="username">닉네임</div><hr>
-            </div>
-            <div id="comment">
-                <div class="star">⭐⭐⭐⭐⭐</div>
-                <p class="comment">여기 산 너무 좋아요!</p>
-                <div class="username">닉네임</div><hr>
             </div>
         </div>
     </div>
@@ -100,5 +285,77 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        var mnt_data //mnt_data에 대한 전역변수를 선언해 줍니다.
+        // 이 아래부터는 카카오 API 예제를 긁어온 것입니다. 헤드가 아닌 바디에 붙여서 작동시키는데, html 페이지 렌더링 속도를 빠르게 하기 위해서라고 합니다.
+		// 저는 아직 코드에 대해 완벽히 이해하지는 못했습니다. 카카오맵 API의 키워드로 장소 검색하기를 보고 참조하시길 부탁드립니다.
+        // ajax를 한번 더 호출합니다. ajax코드가 반복되므로 사실 좋은 방법은 아닙니다. 더 좋은 방법이 있으시다면 제보 부탁드립니다.
+        $.ajax({
+                type: "GET",
+                url: "/mnt_show?num_give="+'{{mnt_no}}', // app.py에서 mnt_no로 받은 정보를 활용해 검색 후 데이터를 받아옵니다. flask를 통해 받은 데이터는 {{데이터}} 로 활용이 가능해요.
+                async: false, // ajax에 들어간 데이터를 밖으로 빼주는 역할을 합니다.
+                data: {},
+                success: function(response){
+                    mnt_data = response['mnt_data']
+                }
+            })
+
+        let address = mnt_data['mnt_address'] + ' ' + mnt_data['mnt_name']
+
+		let searchWord = address
+
+		var infowindow = new kakao.maps.InfoWindow({zIndex:-1})
+
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+				mapOption = {
+					center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+					level: 3 // 지도의 확대 레벨
+				}
+
+		// 지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption)
+
+		// 장소 검색 객체를 생성합니다
+		var ps = new kakao.maps.services.Places()
+
+		// 키워드로 장소를 검색합니다
+		ps.keywordSearch(searchWord, placesSearchCB) // 이곳이 포인트. 주소지와 산의 이름을 합쳐 검색어를 만들어 냅니다.
+
+		// 키워드 검색 완료 시 호출되는 콜백함수 입니다
+		function placesSearchCB (data, status, pagination) {
+			if (status === kakao.maps.services.Status.OK) {
+
+				// 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+				// LatLngBounds 객체에 좌표를 추가합니다
+				var bounds = new kakao.maps.LatLngBounds();
+
+				for (var i=0; i<data.length; i++) {
+					displayMarker(data[i]);
+					bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+				}
+
+				// 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+				map.setBounds(bounds);
+			}
+		}
+
+		// 지도에 마커를 표시하는 함수입니다
+		function displayMarker(place) {
+
+			// 마커를 생성하고 지도에 표시합니다
+			var marker = new kakao.maps.Marker({
+				map: map,
+				position: new kakao.maps.LatLng(place.y, place.x)
+			});
+
+			// 마커에 클릭이벤트를 등록합니다
+			kakao.maps.event.addListener(marker, 'click', function() {
+				// 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+				infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>')
+				infowindow.open(map, marker)
+			})
+		}
+	</script>
 </body>
 </html>

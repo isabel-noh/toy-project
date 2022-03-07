@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <meta property="og:title" content="한국 명산 정보 커뮤니티" />
+    <meta property="og:description" content="한국의 100대 명산에 대한 정보를 공유하고 후기를 남기는 공간입니다." />
+    <meta property="og:image" content="http://san.chosun.com/site/data/img_dir/2018/05/31/2018053102508_0.jpg" />
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -21,6 +25,15 @@
             font-family: 'Gowun Dodum', sans-serif;
         }
 
+        a#topBtn {
+            position: fixed; /* 포지션 고정 */
+            right: 2.5%; /* - %도 할수 있음*/
+            bottom: 10px; /* 밑에서 5px */
+            display: none; /* 보여지지 없음 - 기본적으로 안보여지게 */
+            z-index: 9999; /* 포지션을 먼저 지정후 z-좌표(레이어) : 9999입니다. */
+
+            text-decoration: none;
+        }
 
         .mytitle {
             width: 100%;
@@ -38,150 +51,191 @@
             justify-content: center;
         }
 
-        .input-group{
-            width: 800px;
-            height: 50px;
-        }
-
-        .mtname{
+        .mtname {
             font-weight: bold;
         }
-        .mtsubinfo {
 
-        }
+
         .mtaddress {
             color: gray;
         }
 
         .mycards {
             margin: 30px auto 30px auto;
+            max-width: 1200px;
             width: 95%;
         }
-                /*footer*/
+
+        /*footer*/
         footer {
+            max-width: 1200px;
+            width: 95%;
             height: 150px;
             position: relative;
             padding: 10px 0px 0px 50px;
-            /* transform : translateY(-100%); */ /*구글에서 footer bottom으로 박을 때 이걸 쓰랬는데 안쓰니까 bottom에 박히는데? 일단 주석처리 ㄱ*/
-            border: 1px solid lightgrey;
+
         }
 
         .footer-title {
-            font-size: 2em;
+            font-size: 170%;
             color: grey;
         }
 
         .footer-detail {
             color: darkgrey;
         }
+        button{
+            width: 100%
+        }
 
     </style>
+
+    <script>
+
+        $(document).ready(function () {
+            listing();
+        });
+
+        function listing() {
+            $.ajax({
+                type: 'GET',
+                url: '/mnt_info',
+                data: {},
+                success: function (response) {
+                    let rows = response['mnt']
+                    for (let i = 0; i < rows.length; i++) {
+                        let mnt_name = rows[i]['mnt_name']
+                        let mnt_address = rows[i]['mnt_address']
+                        let mnt_img = rows[i]['mnt_img']
+                        let mnt_no = rows[i]['mnt_no']
+
+                        let temp_html = `<div class="col">
+                                                <div class="card h-100">
+                                                    <a href="/index_sub?mnt_no=${mnt_no}"><img id= "img-mtn" src="${mnt_img}" style="max-width: 100%;max-height: 150px; height: auto; display: block; margin: 0px auto; alt="${mnt_name}" class="card-img-top"></a>
+                                                    <div class="card-body">
+                                                        <h5 class="mtname">${mnt_name}</h5>
+                                                        <p class="mtaddress">${mnt_address}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`
+
+                        $("#img-mtn").attr("src", mnt_img)
+                        $('#cards-box').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        // 코드 작성
+        function handleOnChange() {
+            // 선택된 데이터 가져오기
+            $('#cards-box').empty()
+            let value = $('#area').val()
+
+            // 데이터 출력
+            // document.getElementById('region').innerText = value;
+            $.ajax({
+                type: 'GET',
+                url: '/mnt_select?area_give=' + value,
+                data: {},
+                success: function (response) {
+                    let rows = response['search_list']
+                    console.log(rows)
+                    for (let i = 0; i < rows.length; i++) {
+                        let mnt_name = rows[i]['mnt_name']
+                        let mnt_address = rows[i]['mnt_address']
+                        let mnt_img = rows[i]['mnt_img']
+                        let mnt_no = rows[i]['mnt_no']
+
+    // 사진을 누르면 mnt_no도 같이 전달될 수 있게 url 매개변수에 값을 할당
+                        let temp_html = `<div class="col">
+                                                <div class="card h-100">
+                                                    <a href="/index_sub?mnt_no=${mnt_no}"><img id= "img-mtn" src="${mnt_img}" style="max-width: 100%;max-height: 150px; height: auto; display: block; margin: 0px auto; alt="${mnt_name}" class="card-img-top"></a>
+                                                    <div class="card-body">
+                                                        <h5 class="mtname">${mnt_name}</h5>
+                                                        <p class="mtaddress">${mnt_address}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`
+
+                        $("#img-mtn").attr("src", mnt_img)
+                        $('#cards-box').append(temp_html)
+
+                    }
+                }
+            })
+        }
+        $(function () { // 보이기 | 숨기기
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 250) { //250 넘으면 버튼이 보여집니다.
+                    $('#topBtn').fadeIn();
+                } else {
+                    $('#topBtn').fadeOut();
+                }
+            }); // 버튼 클릭시
+            $("#topBtn").click(function () {
+                $('html, body').animate({
+                    scrollTop: 0 // 0 까지 animation 이동합니다.
+                }, 400); // 속도 400
+                return false;
+            });
+        });
+    </script>
+
 </head>
 
 <body>
 <div class="mytitle">
     <h1>한국 명산 코스 정보 커뮤니티</h1>
-    <p>
-    <div class="input-group">
-        <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-            <option selected>지역 선택</option>
-            <option value="1">전체</option>
-            <option value="2">서울특별시</option>
-            <option value="3">부산광역시</option>
-            <option value="3">mntiarea = mntiadd.split()</option>
-        </select>
-            <button type="button" class="btn btn-success">찾아보기</button>
+    <br>
+    <div class="selectbox">
+        <div style="float: left;width: 200px">
+            <select class="form-select" id="area" aria-label="Example select with button addon">
+                <option selected>-- 지역 선택 (전체) --</option>
+                <option value="서울">서울특별시</option>
+                <option value="부산">부산광역시</option>
+                <option value="대구">대구광역시</option>
+                <option value="인천">인천광역시</option>
+                <option value="광주">광주광역시</option>
+                <option value="대전">대전광역시</option>
+                <option value="울산">울산광역시</option>
+                <option value="경기도">경기도</option>
+                <option value="강원도">강원도</option>
+                <option value="충청북도">충청북도</option>
+                <option value="충청남도">충청남도</option>
+                <option value="전라북도">전라북도</option>
+                <option value="전라남도">전라남도</option>
+                <option value="경상북도">경상북도</option>
+                <option value="경상남도">경상남도</option>
+                <option value="제주도">제주특별자치도</option>
+            </select>
+        </div>
+        <div style="display: inline-block; margin-left: 10px; width: 100px">
+            <button type="button" onclick="handleOnChange()" class="btn btn-success">찾아보기</button>
+        </div>
     </div>
-    </p>
 </div>
-
 <div class="mycards">
-    <div class="row row-cols-1 row-cols-md-5 g-4" id="cards-box">
-        <div class="col">
-            <div class="card h-100">
-                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="mtname">가리산 산이름/mntiname</h5>
-                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
-                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
-                    </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="mtname">산이름/석준님key mntiname</h5>
-                        <p class="mtsubinfo">산정보부제/미란님key subnm</p>
-                        <p class="mtaddress">주소/석준님key mntiadd</p>
-                    </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="mtname">가리산 산이름/mntiname</h5>
-                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
-                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
-                    </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="mtname">가리산 산이름/mntiname</h5>
-                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
-                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
-                    </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="mtname">가리산 산이름/mntiname</h5>
-                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
-                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
-                    </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="mtname">가리산 산이름/mntiname</h5>
-                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
-                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
-                    </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                    <img src="https://i.imgur.com/wVQ10Wi.jpg" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="mtname">가리산 산이름/mntiname</h5>
-                        <p class="mtsubinfo">소양호에서 폭포 따라 정상까지 산정보부제/subnm</p>
-                        <p class="mtaddress">강원도 춘천시 북사면 물로리 주소/mntiadd</p>
-                    </div>
-            </div>
-        </div>
+    <div class="row row-cols-3 row-cols-md-5 g-4" id="cards-box">
+
     </div>
 </div>
-</div>
 
-    <!--footer-->
-    <footer class="footer">
-        <div>
-            <div class="footer-title">
-                한국 명산 코스 정보 커뮤니티
-            </div>
-            <div class="footer-detail">
-                Designed by 항해99 사전스터디 24조
-            </div>
+
+<!--footer-->
+<footer class="footer">
+    <div>
+        <div class="footer-title">
+            한국 명산 코스 정보 커뮤니티
         </div>
-    </footer>
+        <div class="footer-detail">
+            Designed by 항해99 사전스터디 24조
+        </div>
+        <a id="topBtn" href="#"><button class="btn btn-success">[TOP]</button></a>
+    </div>
+</footer>
 </body>
 </html>
 
